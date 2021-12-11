@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+: '
+Runs various pre-commit checks using the poetry run command. Some commands take
+up to two arguments (e.g. poetry run black .), and all commands require at
+least one argument.
+'
+
+if [[ $1 == "flake8" ]]
+then
+	poetry run flake8
+else
+	poetry run $1 $2
+fi

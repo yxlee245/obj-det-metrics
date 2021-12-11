@@ -1,0 +1,51 @@
+# INSTRUCTIONS:
+#
+# We do not use hooks from github repositories (except pre-commit-hooks
+# for some additional syntax-formatting) as they come with opinionated
+# defaults that may conflict with our local config files. All checks are
+# therefore local using poetry and a shell-script .pre-commit-checks. This
+# also gives us more fine-grained control over code formatting across our
+# code repositories.
+#
+# require_serial: Setting this to true ensures that the script is only
+# called once per commit.
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        entry: "./.pre-commit-checks black ."
+        language: system
+        require_serial: true
+
+  - repo: local
+    hooks:
+      - id: flake8
+        name: flake8
+        entry: "./.pre-commit-checks flake8"
+        language: system
+        require_serial: true
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: "./.pre-commit-checks mypy ."
+        language: system
+        require_serial: true
+
+  - repo: local
+    hooks:
+      - id: isort
+        name: isort
+        entry: "./.pre-commit-checks isort ."
+        language: system
+        require_serial: true

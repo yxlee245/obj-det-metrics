@@ -1,0 +1,17 @@
+# INSTRUCTIONS:
+#
+# The select and ignore fields are recommended settings
+# by Black. If you find your project is struggling to
+# meet certain PEP standards, or if you have good reason
+# to not conform to a standard in your project, you can
+# add the code to the ignore variable (comma-separated).
+# e.g. "C901: Function is too complex" can require significant
+# code refactoring, and may be temporarily disabled for
+# existing projects. You should also maintain the exclude
+# list settings suitable for your project.
+
+[flake8]
+max-line-length = 120
+max-complexity = 10
+select = C,E,F,W,B,B950
+ignore = E501,W503
