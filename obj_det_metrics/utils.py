@@ -186,3 +186,7 @@ def _compute_cumsum(values: List[float]) -> None:
 
 def _generate_empty_detections_dict() -> Detections:
     return {"boxes": [], "labels": [], "scores": []}
+
+
+def _generate_empty_ground_truths_dict() -> GroundTruths:
+    return {"boxes": [], "labels": []}
