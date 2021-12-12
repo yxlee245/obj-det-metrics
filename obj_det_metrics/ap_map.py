@@ -1,7 +1,7 @@
 # Adapted from https://github.com/Cartucho/mAP
 
 from collections import defaultdict
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from obj_det_metrics.utils import (
     _compute_counts_cumsum,
@@ -17,8 +17,12 @@ from obj_det_metrics.variables import (
 )
 
 
-def _voc_ap(rec, prec):
-    """
+def _voc_ap(rec: List[float], prec: List[float]) -> Tuple[float, List[float], List[float]]:
+    """Calculate the AP given the recall and precision array
+    1st) We compute a version of the measured precision/recall curve with
+        precision monotonically decreasing
+    2nd) We compute the AP as the area under this curve by numerical integration.
+
     --- Official matlab code VOC2012---
     mrec=[0 ; rec ; 1];
     mpre=[0 ; prec ; 0];
@@ -27,6 +31,14 @@ def _voc_ap(rec, prec):
     end
     i=find(mrec(2:end)~=mrec(1:end-1))+1;
     ap=sum((mrec(i)-mrec(i-1)).*mpre(i));
+
+    Args:
+        rec (List[float]): List of recall values for all detections
+        prec (List[float]): List of precision values for all detections
+
+    Returns:
+        Tuple[float, List[float], List[float]]: Contains AP, approximated recall values
+            and approximated precision values
     """
     rec.insert(0, 0.0)  # insert 0.0 at begining of list
     rec.append(1.0)  # insert 1.0 at end of list
@@ -34,31 +46,28 @@ def _voc_ap(rec, prec):
     prec.insert(0, 0.0)  # insert 0.0 at begining of list
     prec.append(0.0)  # insert 0.0 at end of list
     mpre = prec[:]
-    """
-     This part makes the precision monotonically decreasing
-        (goes from the end to the beginning)
-        matlab: for i=numel(mpre)-1:-1:1
-                    mpre(i)=max(mpre(i),mpre(i+1));
-    """
+    #  This part makes the precision monotonically decreasing
+    #     (goes from the end to the beginning)
+    #     matlab: for i=numel(mpre)-1:-1:1
+    #                 mpre(i)=max(mpre(i),mpre(i+1));
+
     # matlab indexes start in 1 but python in 0, so I have to do:
     #     range(start=(len(mpre) - 2), end=0, step=-1)
     # also the python function range excludes the end, resulting in:
     #     range(start=(len(mpre) - 2), end=-1, step=-1)
     for i in range(len(mpre) - 2, -1, -1):
         mpre[i] = max(mpre[i], mpre[i + 1])
-    """
-     This part creates a list of indexes where the recall changes
-        matlab: i=find(mrec(2:end)~=mrec(1:end-1))+1;
-    """
+
+    #  This part creates a list of indexes where the recall changes
+    #     matlab: i=find(mrec(2:end)~=mrec(1:end-1))+1;
     i_list = []
     for i in range(1, len(mrec)):
         if mrec[i] != mrec[i - 1]:
             i_list.append(i)  # if it was matlab would be i + 1
-    """
-     The Average Precision (AP) is the area under the curve
-        (numerical integration)
-        matlab: ap=sum((mrec(i)-mrec(i-1)).*mpre(i));
-    """
+
+    #  The Average Precision (AP) is the area under the curve
+    #     (numerical integration)
+    #     matlab: ap=sum((mrec(i)-mrec(i-1)).*mpre(i));
     ap = 0.0
     for i in i_list:
         ap += (mrec[i] - mrec[i - 1]) * mpre[i]
@@ -70,6 +79,18 @@ def compute_ap_map(
     detections_dict_list: List[DetectionsDict],
     iou_threshold: float = 0.5,
 ) -> OutputsDict:
+    """Overall function to compute APs and mAP
+
+    Args:
+        ground_truth_dict_list (List[GroundTruthDict]): List of dicts containing ground truth coordinates,
+            class labels and file IDs
+        detections_dict_list (List[DetectionsDict]): List of dicts containing detection coordinates,
+            class labels, confidence scores and file IDs
+        iou_threshold (float, optional): IoU threshold to determine if detection is true positive. Defaults to 0.5.
+
+    Returns:
+        OutputsDict: Dict containing APs for each class, and mAP
+    """
     gt_file_ids = set([gt_dict["file_id"] for gt_dict in ground_truth_dict_list])
 
     gt_count_per_class, gt_bboxes_dict = _generate_gt_objs(ground_truth_dict_list, detections_dict_list)

@@ -15,6 +15,19 @@ from obj_det_metrics.variables import (
 def _generate_gt_objs(
     ground_truth_dict_list: List[GroundTruthDict], detections_dict_list: List[DetectionsDict]
 ) -> Tuple[Dict[ClassName, int], Dict[str, List[BoundingBox]]]:
+    """Helper function to generate:
+    - `gt_count_per_class`: Dict containing total counts of ground truth bounding boxes per class
+    - `gt_bboxes_dict`: Dict containing list of ground truth bounding box objects for each file ID
+
+    Args:
+        ground_truth_dict_list (List[GroundTruthDict]): List of dicts containing ground truth coordinates,
+            class labels and file IDs
+        detections_dict_list (List[DetectionsDict]): List of dicts containing detection coordinates,
+            class labels, confidence scores and file IDs
+
+    Returns:
+        Tuple[Dict[ClassName, int], Dict[str, List[BoundingBox]]]: Contains `gt_count_per_class` and `gt_bboxes_dict`
+    """
     gt_count_per_class: Dict[ClassName, int] = defaultdict(lambda: 0)
     dt_file_ids = set([dt_dict["file_id"] for dt_dict in detections_dict_list])
     gt_bboxes_dict: Dict[str, List[BoundingBox]] = defaultdict(lambda: [])
@@ -39,6 +52,19 @@ def _generate_gt_objs(
 def _generate_dt_objs(
     gt_classes: List[ClassName], detections_dict_list: List[DetectionsDict], gt_file_ids: Set[str]
 ) -> Dict[ClassName, List[BoundingBox]]:
+    """Helper function to generate:
+    - `dt_bboxes_dict`: : Dict containing list of detection bounding box objects for each class
+
+    Args:
+        gt_classes (List[ClassName]): List of unique class labels in ground truth
+        detections_dict_list (List[DetectionsDict]): List of dicts containing detection coordinates,
+            class labels, confidence scores and file IDs
+        gt_file_ids (Set[str]): Set of unique file IDs for ground truth
+
+    Returns:
+        Dict[ClassName, List[BoundingBox]]: Dict `dt_bboxes_dict` containing list of detection bounding box objects
+            for each class
+    """
     dt_bboxes_dict: Dict[ClassName, List[BoundingBox]] = defaultdict(lambda: [])
     for class_name in gt_classes:
         for dt_dict in detections_dict_list:
@@ -63,6 +89,15 @@ def _generate_dt_objs(
 
 
 def _compute_iou(dt_coordinates: Coordinates, gt_coordinates: Coordinates) -> float:
+    """Helper function to compute IoU
+
+    Args:
+        dt_coordinates (Coordinates): Coordinates of detection bounding box, in the form [xmin, ymin, xmax, ymax]
+        gt_coordinates (Coordinates): Coordinates of ground truth box, in the form [xmin, ymin, xmax, ymax]
+
+    Returns:
+        float: IoU score
+    """
     int_coordintates = [
         max(dt_coordinates[0], gt_coordinates[0]),
         max(dt_coordinates[1], gt_coordinates[1]),
@@ -81,6 +116,18 @@ def _compute_iou(dt_coordinates: Coordinates, gt_coordinates: Coordinates) -> fl
 def _get_best_gt_bbox(
     dt_bbox: BoundingBox, class_name: ClassName, gt_bboxes_dict: Dict[str, List[BoundingBox]]
 ) -> Tuple[BoundingBox, float]:
+    """Helper function to select best ground truth bounding box and compute best IoU score for
+    inputted detecton bounding box
+
+    Args:
+        dt_bbox (BoundingBox): Detection bounding box object
+        class_name (ClassName): Class name to be used for comparison
+        gt_bboxes_dict (Dict[str, List[BoundingBox]]): Dict containing list of ground truth bounding box objects for
+            each file ID
+
+    Returns:
+        Tuple[BoundingBox, float]: Contains best ground truth bounding box object and best IoU score
+    """
     dt_file_id = dt_bbox.file_id
     gt_bboxes = gt_bboxes_dict[dt_file_id]
     max_iou = -1.0
@@ -97,6 +144,11 @@ def _get_best_gt_bbox(
 
 
 def _compute_counts_cumsum(values: List[int]):
+    """Helper function to compute cumulative sum of count values in-memory
+
+    Args:
+        values (List[int]): List of counts to compute cumulative sum over
+    """
     cumsum = 0
     for idx, val in enumerate(values):
         values[idx] += cumsum
