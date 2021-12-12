@@ -153,3 +153,30 @@ def _compute_counts_cumsum(values: List[int]):
     for idx, val in enumerate(values):
         values[idx] += cumsum
         cumsum += val
+
+
+def _generate_empty_gt_dict() -> GroundTruthDict:
+    """Helper function to generate empty ground truth dict
+
+    Returns:
+        GroundTruthDict: Ground truth dict with empty fields
+    """
+    return {
+        "coordinates": [],
+        "class_labels": [],
+        "file_id": "",
+    }
+
+
+def _generate_empty_dt_dict() -> DetectionsDict:
+    """Helper function to generate empty detections dict
+
+    Returns:
+        DetectionsDict: Detections dict with empty fields
+    """
+    return {
+        "coordinates": [],
+        "class_labels": [],
+        "conf_scores": [],
+        "file_id": "",
+    }
