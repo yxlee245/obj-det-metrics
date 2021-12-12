@@ -2,6 +2,9 @@ from obj_det_metrics.ap_map import compute_ap_map
 
 
 def main():
+    """Bounding box coordinates are in the form [xmin, ymin, xmax, ymax]"""
+
+    # Define ground truth bounding boxes
     ground_truth_dict_list = [
         {
             "coordinates": [[60, 80, 66, 92], [59, 94, 68, 97], [70, 87, 81, 94], [8, 34, 10, 36]],
@@ -14,6 +17,8 @@ def main():
             "file_id": "test2",
         },
     ]
+
+    # Define detection bounding boxes
     detections_dict_list = [
         {
             "coordinates": [[59, 82, 66, 94], [58, 94, 68, 95], [70, 88, 81, 93], [10, 34, 12, 38]],
