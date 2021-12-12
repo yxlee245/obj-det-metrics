@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Tuple
 
-from obj_det_metrics.variables import BoundingBox, ClassName, Coordinates
+from obj_det_metrics.variables import BoundingBox, Coordinates
 
 
 def read_file_lines_to_list(filepath: str) -> List[str]:
@@ -18,7 +18,7 @@ def read_file_lines_to_list(filepath: str) -> List[str]:
     return content
 
 
-def _generate_detections_by_class(result_dict: Dict[str, Any], class_name: ClassName) -> List[BoundingBox]:
+def _generate_detections_by_class(result_dict: Dict[str, Any], class_name: str) -> List[BoundingBox]:
     detections: List[BoundingBox] = []
     for idx in range(len(result_dict["labels"])):
         if result_dict["labels"][idx] == class_name:
@@ -64,8 +64,8 @@ def _compute_iou(bbgt: Coordinates, bbdt: Coordinates) -> float:
 
 
 def _compute_tp_fp_for_detections(
-    count_true_positives: Dict[ClassName, int],
-    class_name: ClassName,
+    count_true_positives: Dict[str, int],
+    class_name: str,
     detections: List[BoundingBox],
     ground_truth_list: List[BoundingBox],
     iou_threshold: float,

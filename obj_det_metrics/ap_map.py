@@ -12,7 +12,6 @@ from obj_det_metrics.utils import (
     _generate_detections_by_class,
     _generate_ground_truths,
 )
-from obj_det_metrics.variables import ClassName
 
 
 def _voc_ap(rec, prec):
@@ -163,7 +162,7 @@ def calculate_ap_map(ground_truth_dict: dict, result_dict: dict, iou_threshold: 
     occurring_gt_classes = set(ground_truth_dict["labels"])
     unique, counts = np.unique(ground_truth_dict["labels"], return_counts=True)
     ground_truth_counter_per_class = dict(zip(unique, counts))
-    count_true_positives: Dict[ClassName, int] = {}
+    count_true_positives: Dict[str, int] = {}
     sum_average_precision = 0
 
     ground_truth_list = _generate_ground_truths(ground_truth_dict)
