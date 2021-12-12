@@ -91,7 +91,7 @@ def _compute_tp_fp_for_detections(
 
             # true positive
             tp[i] = 1
-            gt_match.set_matched(True)
+            gt_match.matched = True
             count_true_positives[class_name] += 1
             continue
 
