@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "obj-det-metrics"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
-authors = ["yxlee245 <the.force.of.life@gmail.com>"]
+authors = ["yxlee245 <yxlee245@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
