@@ -1,12 +1,6 @@
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
-from obj_det_metrics.variables import (
-    BoundingBox,
-    ClassName,
-    Coordinates,
-    Detections,
-    GroundTruths,
-)
+from obj_det_metrics.variables import BoundingBox, ClassName, Coordinates
 
 
 def _read_file_lines_to_list(filepath: str) -> List[str]:
@@ -24,11 +18,11 @@ def _read_file_lines_to_list(filepath: str) -> List[str]:
     return content
 
 
-def _generate_detections_by_class(result_dict: Detections, class_name: ClassName) -> List[BoundingBox]:
+def _generate_detections_by_class(result_dict: Dict[str, Any], class_name: ClassName) -> List[BoundingBox]:
     """Generate list of detection bounding box objects by class
 
     Args:
-        result_dict (Detections): Dict with {boxes:, labels:, scores:}
+        result_dict (Dict[str, Any]): Dict with {boxes:, labels:, scores:}
         e.g.
         {
         'boxes':
@@ -60,11 +54,11 @@ def _generate_detections_by_class(result_dict: Detections, class_name: ClassName
     return detections
 
 
-def _generate_ground_truths(ground_truth_dict: GroundTruths) -> List[BoundingBox]:
+def _generate_ground_truths(ground_truth_dict: Dict[str, Any]) -> List[BoundingBox]:
     """Generate list of ground truth bounding boxes
 
     Args:
-        ground_truth_dict (GroundTruths: Dict with {boxes:, labels:}
+        ground_truth_dict (Dict[str, Any]): Dict with {boxes:, labels:}
         e.g.
         {
         'boxes':
@@ -182,7 +176,3 @@ def _compute_cumsum(values: List[float]) -> None:
     for idx, val in enumerate(values):
         values[idx] += cumsum
         cumsum += val
-
-
-def _generate_empty_detections_dict() -> Detections:
-    return {"boxes": [], "labels": [], "scores": []}
