@@ -16,19 +16,13 @@ poetry add obj-det-metrics
 pip install obj-det-metrics
 ```
 
-Refer to the[bin/](./bin/) directory for examples of using the package.
+Refer to the [bin/](./bin/) directory for examples of using the package.
 
 ## For contributors
 
 1. Install Poetry (refer to the [documentation](https://python-poetry.org/docs/) for installation steps)
 2. Fork this repo and do git clone.
 3. Run `poetry install` to install dependency packages.
-
-# Milestones
-
-Date | Changes
---- | ---
-12 Dec 2021 | Adapted and refactored codes to compute APs and mAP
 
 # Acknowledgement
 - The codes for computing APs and mAP were adapted from [`mAP` repo by Cartucho](https://github.com/Cartucho/mAP) and [`mapcalc` repo by LeMuecke](https://github.com/LeMuecke/mapcalc).
