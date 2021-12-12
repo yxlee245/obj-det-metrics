@@ -1,7 +1,9 @@
-from typing import List, Union
+from typing import Any, Dict, List, Union
 
 ClassName = Union[str, int]
 Coordinates = List[Union[int, float]]
+Detections = Dict[str, List[Any]]
+GroundTruths = Dict[str, List[Any]]
 
 
 class BoundingBox:
