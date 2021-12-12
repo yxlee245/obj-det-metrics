@@ -6,6 +6,8 @@ from obj_det_metrics.utils import (
     _compute_counts_cumsum,
     _compute_iou,
     _generate_dt_objs,
+    _generate_empty_dt_dict,
+    _generate_empty_gt_dict,
     _generate_gt_objs,
 )
 from obj_det_metrics.variables import BoundingBox, ClassName
@@ -90,3 +92,28 @@ def test_compute_iou(dt_coordinates, gt_coordinates, expected_output):
 def test_compute_counts_cumsum(values, expected_output):
     _compute_counts_cumsum(values)
     assert values == expected_output
+
+
+def test_generate_empty_gt_dict():
+    gt_dict = _generate_empty_gt_dict()
+    assert gt_dict["file_id"] == "", f"Expected empty string for emtpy gt_dict, but got {gt_dict['file_id']}"
+    assert (
+        len(gt_dict["coordinates"]) == 0
+    ), f"Expected length of coordinates list to be 0, but got {len(gt_dict['coordinates'])} instead"
+    assert (
+        len(gt_dict["class_labels"]) == 0
+    ), f"Expected number of class labels to be 0, but got {len(gt_dict['class_labels'])} instead"
+
+
+def test_generate_empty_dt_dict():
+    dt_dict = _generate_empty_dt_dict()
+    assert dt_dict["file_id"] == "", f"Expected empty string for emtpy dt_dict, but got {dt_dict['file_id']}"
+    assert (
+        len(dt_dict["coordinates"]) == 0
+    ), f"Expected length of coordinates list to be 0, but got {len(dt_dict['coordinates'])} instead"
+    assert (
+        len(dt_dict["class_labels"]) == 0
+    ), f"Expected number of class labels to be 0, but got {len(dt_dict['class_labels'])} instead"
+    assert (
+        len(dt_dict["conf_scores"]) == 0
+    ), f"Expected number of confidence scores to be 0, but got {len(dt_dict['conf_scores'])} instead"
