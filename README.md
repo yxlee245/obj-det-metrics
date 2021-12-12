@@ -16,7 +16,7 @@ poetry add obj-det-metrics
 pip install obj-det-metrics
 ```
 
-Refer to [compute_ap_map.py](./bin/compute_ap_map.py) for an example of using the package.
+Refer to the[bin/](./bin/) directory for examples of using the package.
 
 ## For contributors
 
