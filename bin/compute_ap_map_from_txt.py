@@ -6,6 +6,10 @@ from obj_det_metrics.ingest import (
 
 
 def main():
+    """Note: the filenames must be the same between ground truth and detections, for the AP and mAP to work properly.
+    For example, if the lines in "image1.txt" are supposed to be read in for evaluation, the directories containing
+    text files for ground truth and detections must both contain "image1.txt".
+    """
     ground_truth_dict_list = generate_gt_dict_list_from_txts("tests/fixtures/test_ground_truths")
     detections_dict_list = generate_dt_dict_list_from_txts("tests/fixtures/test_detections")
 
