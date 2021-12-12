@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Tuple
 from obj_det_metrics.variables import BoundingBox, ClassName, Coordinates
 
 
-def _read_file_lines_to_list(filepath: str) -> List[str]:
+def read_file_lines_to_list(filepath: str) -> List[str]:
     """Helper funtion to load txt file lines to a list
 
     Args:

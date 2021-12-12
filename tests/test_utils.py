@@ -7,7 +7,7 @@ from obj_det_metrics.utils import (
     _compute_iou,
     _generate_detections_by_class,
     _generate_ground_truths,
-    _read_file_lines_to_list,
+    read_file_lines_to_list,
 )
 
 TEST_LINES_PATH = "tests/fixtures/test_lines.txt"
@@ -35,7 +35,7 @@ GROUND_TRUTH: Dict[str, List[Any]] = {
 
 
 def test_read_file_lines_to_list():
-    output = _read_file_lines_to_list(TEST_LINES_PATH)
+    output = read_file_lines_to_list(TEST_LINES_PATH)
     assert output == [
         "line 1",
         "line 2",
