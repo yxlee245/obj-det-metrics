@@ -77,7 +77,7 @@ def _generate_dt_objs(
                         coordinates=dt_dict["coordinates"][i],
                         class_name=dt_dict["class_labels"][i],
                         file_id=dt_dict["file_id"],
-                        conf_score=dt_dict["conf_score"][i],
+                        conf_score=dt_dict["conf_scores"][i],
                     )
                     for i in range(dt_len)
                     if dt_dict["class_labels"][i] == class_name
