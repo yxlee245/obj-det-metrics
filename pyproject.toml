@@ -20,19 +20,3 @@ pre-commit = "^2.14.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.black]
-line-length = 120
-target-version = ['py38']
-include = '\.pyi?$'
-exclude = '''
-'''
-
-[tool.coverage.run]
-omit = [".*", "*/site-packages/*"]
-
-[tool.coverage.report]
-fail_under = 100
-
-[tool.isort]
-profile = "black"
