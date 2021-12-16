@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "obj-det-metrics"
-version = "0.2.0"
+version = "0.2.1"
 description = "Simple package to compute metrics for object detection"
 authors = ["yxlee245 <yxlee245@gmail.com>"]
 readme = "README.md"
