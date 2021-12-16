@@ -1,6 +1,8 @@
 import os
 from typing import List
 
+import pipe
+
 from obj_det_metrics.utils import _generate_empty_dt_dict, _generate_empty_gt_dict
 from obj_det_metrics.variables import DetectionsDict, GroundTruthDict
 
@@ -50,8 +52,13 @@ def generate_gt_dict_list_from_txts(txt_dir: str) -> List[GroundTruthDict]:
     Returns:
         List[GroundTruthDict]: List of ground truth dicts
     """
-    txt_filepaths = [os.path.join(txt_dir, filename) for filename in os.listdir(txt_dir) if ".txt" in filename.lower()]
-    return [_generate_gt_dict_from_txt(filepath) for filepath in txt_filepaths]
+    gt_dict_list = list(
+        os.listdir(txt_dir)
+        | pipe.where(lambda filename: ".txt" in filename.lower())
+        | pipe.select(lambda filename: os.path.join(txt_dir, filename))
+        | pipe.select(_generate_gt_dict_from_txt)
+    )
+    return gt_dict_list
 
 
 def _generate_dt_dict_from_txt(filepath: str) -> DetectionsDict:
@@ -87,5 +94,10 @@ def generate_dt_dict_list_from_txts(txt_dir: str) -> List[DetectionsDict]:
     Returns:
         List[DetectionsDict]: List of ground truth dicts
     """
-    txt_filepaths = [os.path.join(txt_dir, filename) for filename in os.listdir(txt_dir) if ".txt" in filename.lower()]
-    return [_generate_dt_dict_from_txt(filepath) for filepath in txt_filepaths]
+    dt_dict_list = list(
+        os.listdir(txt_dir)
+        | pipe.where(lambda filename: ".txt" in filename.lower())
+        | pipe.select(lambda filename: os.path.join(txt_dir, filename))
+        | pipe.select(_generate_dt_dict_from_txt)
+    )
+    return dt_dict_list

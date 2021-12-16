@@ -3,6 +3,8 @@
 from collections import defaultdict
 from typing import Any, Dict, List, Tuple
 
+import pipe
+
 from obj_det_metrics.utils import (
     _compute_counts_cumsum,
     _generate_dt_objs,
@@ -58,19 +60,17 @@ def _voc_ap(rec: List[float], prec: List[float]) -> Tuple[float, List[float], Li
     for i in range(len(mpre) - 2, -1, -1):
         mpre[i] = max(mpre[i], mpre[i + 1])
 
-    #  This part creates a list of indexes where the recall changes
+    #  where() pipe compoment creates a generator of indexes where the recall changes
     #     matlab: i=find(mrec(2:end)~=mrec(1:end-1))+1;
-    i_list = []
-    for i in range(1, len(mrec)):
-        if mrec[i] != mrec[i - 1]:
-            i_list.append(i)  # if it was matlab would be i + 1
-
     #  The Average Precision (AP) is the area under the curve
     #     (numerical integration)
     #     matlab: ap=sum((mrec(i)-mrec(i-1)).*mpre(i));
-    ap = 0.0
-    for i in i_list:
-        ap += (mrec[i] - mrec[i - 1]) * mpre[i]
+    ap_slices = (
+        range(1, len(mrec))
+        | pipe.where(lambda i: mrec[i] != mrec[i - 1])
+        | pipe.select(lambda i: (mrec[i] - mrec[i - 1]) * mpre[i])
+    )
+    ap = sum(ap_slices)
     return ap, mrec, mpre
 
 
